@@ -1,0 +1,16 @@
+Installation:
+  V1:
+    Helm:
+      HTTP:
+        ClientTimeout: "5s"
+    Provider:
+      Kind: "aws"
+    Registry:
+      Domain: quay.io
+    Secret:
+      CAPI:
+        AWS:
+          AccessKeyID: defaultID
+          SecretAccessKey: defaultKey
+          Region: defaultRegion
+serviceType: bad-one

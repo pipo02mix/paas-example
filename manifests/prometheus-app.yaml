@@ -1,0 +1,26 @@
+apiVersion: application.giantswarm.io/v1alpha1
+kind: App
+metadata:
+  annotations:
+    chart-operator.giantswarm.io/force-helm-upgrade: "false"
+  labels:
+    app: prometheus
+    app-operator.giantswarm.io/version: 0.0.0
+  name: prometheus
+  namespace: giantswarm
+spec:
+  catalog: giantswarm
+  config:
+    configMap:
+      name: my-cluster-values
+      namespace: giantswarm
+  kubeConfig:
+    context:
+      name: my-cluster-admin@my-cluster
+    inCluster: false
+    secret:
+      name: my-cluster-config
+      namespace: giantswarm
+  name: prometheus-operator-app
+  namespace: monitoring
+  version: 0.8.2

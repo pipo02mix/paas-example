@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+data:
+  values: |
+    clusterDNSIP: 172.31.0.10
+    clusterID: my-cluster
+    chartOperator:
+      cni:
+        install: true
+kind: ConfigMap
+metadata:
+  labels:
+    app-operator.giantswarm.io/watching: "true"
+  name: my-cluster-values
+  namespace: giantswarm
+---
+apiVersion: application.giantswarm.io/v1alpha1
+kind: App
+metadata:
+  labels:
+    app-operator.giantswarm.io/version: 0.0.0
+  name: chart-operator
+  namespace: giantswarm
+spec:
+  catalog: default
+  config:
+    configMap:
+      name: my-cluster-values
+      namespace: giantswarm
+  kubeConfig:
+    context:
+      name: my-cluster-admin@my-cluster
+    inCluster: false
+    secret:
+      name: my-cluster-config
+      namespace: giantswarm
+  name: chart-operator
+  namespace: giantswarm
+  version: 2.16.0
