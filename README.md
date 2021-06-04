@@ -50,30 +50,24 @@ kubectl apply -f manifests/cluster.yaml
 
 __Note__: You can also check the status every moment using `clusterctl describe cluster my-cluster -n default`
 
-
-Once the cluster is up you can get access using
-```
-clusterctl get kubeconfig my-cluster > /tmp/k.yaml
-```
-
 ### Create an app
 
 
-```
-kubectl create secret generic my-cluster-config --from-file=value=/tmp/k.yaml
-```
+At the same time you had submitted the request for the cluster creation, you can deploy all tooling or addons for that cluster (to become a real platform). Let's do it here we are going to install Prometheus (evuantually) on the cluster.
 
+The App operator uses behind the scene helm, and needs to pull the chart package from a helm repository. So before applying our toolings manifests, let's define a catalog with a reference to the repository. Here in the example we use a public Giant Swarm catalog but you can use other.
 ```
 kubectl apply -f manifests/catalog.yaml
 ```
 
+Once the catalog is applied we can create App custom resources, in this case a Prometheus operator deployment, to make the operator create the deployment in our new platform cluster.
 ```
 kubectl apply -f manifests/prometheus-app.yaml
 ```
 
 ### Create a S3 bucket
 
-
+Finally let's add a manifest that defines a S3 bucket with name `kcd-spain` so we could use it in our platform as object storage.
 ```
 kubectl apply -f manifests/bucket.yaml
 ```

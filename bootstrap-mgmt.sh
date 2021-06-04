@@ -43,6 +43,9 @@ export AWS_B64ENCODED_CREDENTIALS=$(clusterawsadm bootstrap credentials encode-a
 printf "\n\e[32m-> Deploy CAPI controllers in the mgmt cluster\e[0m\n"
 clusterctl init --infrastructure aws
 
+printf "\n\e[32m-> Generate a kubeconfig for new clusterin /tmp \e[0m\n"
+clusterctl get kubeconfig my-cluster > /tmp/k.yaml
+
 # 1.2. Install CAPI controllers (Helm)
 # helm template capa --namespace capi --repo https://giantswarm.github.io/control-plane-test-catalog cluster-api-provider-aws --values mgmt-values.yaml | kubectl apply -f -
 
@@ -52,6 +55,9 @@ clusterctl init --infrastructure aws
 
 printf "\n\e[32m-> Install app operator in mgmt cluster\e[0m\n"
 apptestctl bootstrap --kubeconfig="$(kind get kubeconfig)"
+
+printf "\n\e[32m-> Create with the new cluster kubeconfig a secret for the app operator to install our apps\e[0m\n"
+kubectl create secret generic -n giantswarm my-cluster-config --from-file=value=/tmp/k.yaml
 
 printf "\n\e[32m-> Creating the chart operator app CR referencing new cluster\e[0m\n"
 kubectl apply -f app-operator/catalog.yaml
