@@ -1,0 +1,26 @@
+apiVersion: application.giantswarm.io/v1alpha1
+kind: App
+metadata:
+  annotations:
+    chart-operator.giantswarm.io/force-helm-upgrade: "false"
+  labels:
+    app: calico
+    app-operator.giantswarm.io/version: 0.0.0
+  name: calico
+  namespace: giantswarm
+spec:
+  catalog: giantswarm
+  config:
+    configMap:
+      name: my-cluster-values
+      namespace: giantswarm
+  kubeConfig:
+    context:
+      name: my-cluster-admin@my-cluster
+    inCluster: false
+    secret:
+      name: my-cluster-config
+      namespace: giantswarm
+  name: calico
+  namespace: kube-system
+  version: 0.2.0
